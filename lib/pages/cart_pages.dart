@@ -32,11 +32,26 @@ class CartPages extends StatelessWidget {
             ));
   }
 
+  void removeItemFromCartAlert(BuildContext context, Product product) {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.confirm,
+      title: 'Deseas eliminar el producto ?',
+      confirmBtnText: 'si',
+      cancelBtnText: 'no',
+      onConfirmBtnTap: () {
+        Navigator.pop(context);
+        context.read<Shop>().removeItemCart(product);
+      },
+    );
+  }
+
   void payButtonPressd(BuildContext context) {
     showDialog(
         context: context,
         builder: (context) => const AlertDialog(
-              content: Text('conectar con el backend'),
+              content: Text('Error de conexion con el backend'),
+              title: Text('Error al pagar'),
             ));
   }
 
@@ -73,12 +88,26 @@ class CartPages extends StatelessWidget {
 
                       //return as a cart tile UI
 
-                      return ListTile(
-                        title: Text(item.name),
-                        subtitle: Text(item.price.toStringAsFixed(2)),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.remove),
-                          onPressed: () => removeItemFromCart(context, item),
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        margin: EdgeInsets.only(
+                          left: 20,
+                          top: 20,
+                          right: 20,
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            item.name,
+                          ),
+                          subtitle: Text(item.price.toStringAsFixed(2)),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () =>
+                                removeItemFromCartAlert(context, item),
+                          ),
                         ),
                       );
                     },
